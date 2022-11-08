@@ -8,15 +8,9 @@ ENV SC_TARGET=saivs
 
 WORKDIR /sai
 
-RUN git clone https://github.com/sonic-net/sonic-sairedis.git \
-        && cd sonic-sairedis \
-        && . /sai.env \
-        && git checkout ${SAIREDIS_ID} \
-        && git submodule update --init --recursive \
-        && cd SAI && git fetch origin \
-        && git checkout ${SAI_ID} \
-        && git submodule update --init --recursive \
-        && cd .. \
+# Method 2: Using Pre-downloaded source files
+COPY	./sonic-sairedis/ ./sonic-sairedis/
+RUN 	cd ./sonic-sairedis \
         && ./autogen.sh \
         && dpkg-buildpackage -us -uc -b --target=binary-syncd-vs --jobs=auto \
         && cd .. \
